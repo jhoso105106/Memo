@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addMemoButton = document.getElementById('addMemoButton');
     const memoList = document.getElementById('memoList');
     const clearAllButton = document.getElementById('clearAllButton');
+    const sendMailButton = document.getElementById('sendMailButton');
 
     // メモは { text, time } の配列で管理
     let memos = JSON.parse(localStorage.getItem('memos')) || [];
@@ -57,6 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('memos');
             renderMemos();
         }
+    });
+
+    sendMailButton.addEventListener('click', () => {
+        // メモ一覧を本文にまとめる
+        const body = memos.map(memo => `${memo.text} (${memo.time})`).join('%0D%0A');
+        const subject = encodeURIComponent('メモ一覧');
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
     });
 
     renderMemos();
